@@ -9,8 +9,6 @@ export default function Navbar() {
   const theme = useSelector((state) => state.theme.theme);
   const root = window.document.documentElement;
 
-  console.log(getTheme);
-
   const handleTheme = () => {
     if (getTheme == "light") {
       setTheme("dark");
