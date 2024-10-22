@@ -12,9 +12,6 @@ const Beranda = () => {
   const data = useSelector((state) => state.beranda);
   const dispatch = useDispatch();
 
-  const theme = useSelector((state) => state.theme.theme);
-  console.log(theme);
-
   useEffect(() => {
     console.log(data);
   }, [data]);
@@ -84,7 +81,7 @@ const Beranda = () => {
     <BerandaView
       dataPopuler={data.populer}
       data={data.trending}
-      datapeople={data.people}
+      tv={data.people}
     />
   );
 };

@@ -28,7 +28,7 @@ function App() {
             <Route path="/movie/:id" element={<DetailBeranda />} />
             <Route path="/rated-movies" element={<RatedMovies />} />
             <Route path="/categories" element={<CategoryPage />} />
-        <Route path="/category/:id" element={<MoviesInCategory />} />
+            <Route path="/category/:id" element={<MoviesInCategory />} />
           </Routes>
         </ThemeContext.Provider>
       </BrowserRouter>

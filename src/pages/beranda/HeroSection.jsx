@@ -23,7 +23,7 @@ const HeroSection = ({ images }) => {
         }}
       ></div>
       <div className="absolute inset-0 bg-black opacity-50"></div> {/* Overlay */}
-      <div className="relative z-10 text-white text-center p-4">
+      <div className="relative flex items-center h-full justify-center z-10 text-white text-center p-4">
         <h2 className="text-3xl font-bold">Welcome to the Movie Hub!</h2>
       </div>
     </div>
