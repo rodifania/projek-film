@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import Favorites from "./components/Favorit";
 import RatedMovies from "./pages/rating/RateMovie";
-import SearchPage from "./pages/SearchPage";
 import CategoryPage from "./pages/CategoryPage";
 import MoviesInCategory from "./components/MoviesInCategory";
 
@@ -22,7 +21,6 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Beranda />} />
-            <Route path="/search" element={<SearchPage />} />
             <Route path="detail/:id" element={<DetailBeranda />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/movie/:id" element={<DetailBeranda />} />

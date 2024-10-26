@@ -1,13 +1,19 @@
 import { Heart, House, ListCheck, Star } from "lucide-react";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import ThemeContext from "./context/ThemeContext";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 export default function Navbar() {
   const [getTheme, setTheme] = useContext(ThemeContext);
   const theme = useSelector((state) => state.theme.theme);
   const root = window.document.documentElement;
+  const [cari, setCari] = useSearchParams();
+  const cariFilm = cari.get("cariFilm");
+  const [hasilCari, setHasilCari] = useState([]); // State untuk hasil pencarian
+
+
 
   const handleTheme = () => {
     if (getTheme == "light") {
@@ -20,6 +26,41 @@ export default function Navbar() {
       root.classList.add("light");
     }
   };
+
+  const ubahCari = useCallback(
+    async (input) => {
+      setCari({ cariFilm: input }); // Update query parameter di URL
+
+      if (input) {
+        try {
+          const response = await axios.get(
+            "https://api.themoviedb.org/3/search/movie?query=${input}&page=1",
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmM2IzMDA2ZjFlYmNiYzExYjc5MWRmN2VkNjMyMDEwYyIsIm5iZiI6MTcyOTQ5MTczNy4wNDg3MDYsInN1YiI6IjY3MDQ5OTlkNGIwYzViOWQ3MTY5YmIwMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.6EotfUV1ySjkB1xi5aK34gHxJceSha-SblHBOCHfq1o", // Ganti dengan kunci API Anda
+              },
+            }
+          );
+          setHasilCari(response.data.results); // Set hasil pencarian ke state
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+          setHasilCari([]); // Kosongkan hasil jika ada error
+        }
+      } else {
+        setHasilCari([]); // Kosongkan hasil jika input kosong
+      }
+    },
+    [setCari]
+  );
+
+  useEffect(() => {
+    if (cariFilm) {
+      ubahCari(cariFilm);
+    }
+  }, [cariFilm, ubahCari]);
+
   return (
     <div>
       <div className="navbar bg-base-100 dark:bg-slate-500 dark:text-white">
@@ -75,7 +116,43 @@ export default function Navbar() {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost text-xl">Halaman Beranda</a>
+        <div className="form-control relative">
+            <label className="input input-bordered flex items-center dark:bg-gray-700 dark:text-white">
+              <input
+                type="text"
+                placeholder="Search"
+                className="grow"
+                value={cariFilm || ""} // Menampilkan kata kunci pencarian saat ini
+                onChange={(input) => ubahCari(input.target.value)} // Panggil fungsi ubahCari saat input berubah
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="h-4 w-4 opacity-70 dark:text-white"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </label>
+            {/* Menampilkan hasil pencarian */}
+            {hasilCari.length > 0 && (
+              <ul className="absolute top-12 bg-white dark:bg-gray-800 w-full mt-2 rounded-lg shadow-lg z-10 dark:text-white">
+                {hasilCari.map((film) => (
+                  <li
+                    key={film.id}
+                    className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white"
+                  >
+                    <Link to={`/detail/${film.id}`}>{film.title}</Link>{" "}
+                    {/* Link ke halaman film */}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
         <div className="navbar-end">
           <label className="swap swap-rotate">
