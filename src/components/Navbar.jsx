@@ -13,8 +13,6 @@ export default function Navbar() {
   const cariFilm = cari.get("cariFilm");
   const [hasilCari, setHasilCari] = useState([]); // State untuk hasil pencarian
 
-
-
   const handleTheme = () => {
     if (getTheme == "light") {
       setTheme("dark");
@@ -34,7 +32,7 @@ export default function Navbar() {
       if (input) {
         try {
           const response = await axios.get(
-            "https://api.themoviedb.org/3/search/movie?query=${input}&page=1",
+            `https://api.themoviedb.org/3/search/movie?query=${input}&page=1`,
             {
               headers: {
                 Accept: "application/json",
@@ -116,7 +114,7 @@ export default function Navbar() {
           </div>
         </div>
         <div className="navbar-center">
-        <div className="form-control relative">
+          <div className="form-control relative">
             <label className="input input-bordered flex items-center dark:bg-gray-700 dark:text-white">
               <input
                 type="text"
@@ -146,7 +144,7 @@ export default function Navbar() {
                     key={film.id}
                     className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white"
                   >
-                    <Link to={`/detail/${film.id}`}>{film.title}</Link>{" "}
+                    <Link to={`/detail/${film.id}`}>{film.title}</Link>
                     {/* Link ke halaman film */}
                   </li>
                 ))}
